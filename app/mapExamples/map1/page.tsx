@@ -1,6 +1,6 @@
 "use client";
 
-import Map from "@/components/mapComponent/app";
+import Map from "@/components/mapExamples/ChangeMapStyles/app";
 
 export default function MapPage() {
   return (

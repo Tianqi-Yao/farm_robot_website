@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type {MapConfig} from './map';
+import type {MapConfig} from './app';
 
 type ControlPanelProps = {
   mapConfigs: MapConfig[];
