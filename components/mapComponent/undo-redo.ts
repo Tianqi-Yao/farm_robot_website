@@ -119,6 +119,14 @@ export default function reducer(state: State, action: Action) {
                 future: [...state.future].slice(0, -1),
             };
         }
+
+        case DrawingActionKind.CLEAR_ALL: {
+            return {
+                past: [],
+                now: [],
+                future: [],
+            };
+        }
     }
 }
 

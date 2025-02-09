@@ -34,7 +34,8 @@ export enum DrawingActionKind {
   SET_OVERLAY = 'SET_OVERLAY',
   UPDATE_OVERLAYS = 'UPDATE_OVERLAYS',
   UNDO = 'UNDO',
-  REDO = 'REDO'
+  REDO = 'REDO',
+  CLEAR_ALL = 'CLEAR_ALL',
 }
 
 export interface ActionWithTypeOnly {
