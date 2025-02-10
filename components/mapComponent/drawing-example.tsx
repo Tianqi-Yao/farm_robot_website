@@ -12,7 +12,7 @@ import { UndoRedoControl } from "./undo-redo-control";
 import { useDrawingManager } from "./use-drawing-manager";
 import ControlPanel from "./control-panel";
 import { getAllCoordinates } from "./getCoordinates";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { DrawingActionKind } from "./types";
 
 const MAP_ID = process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string;
@@ -28,6 +28,11 @@ const DrawingExample = () => {
     const [isHovering, setIsHovering] = useState(false); // 防止 InfoWindow 触发 `onMouseLeave`
     const dispatchRef = useRef<React.Dispatch<any> | null>(null); // 用于保存 dispatch
 
+    // 轮询后端 API
+    useEffect(() => {
+        const interval = setInterval(fetchLocations, 5000); // 每 5 秒获取新坐标
+        return () => clearInterval(interval);
+    }, []);
 
     // 接收 dispatch 并存储到 ref 中
     const handleDispatch = (dispatch: React.Dispatch<any>) => {
@@ -40,7 +45,6 @@ const DrawingExample = () => {
             dispatchRef.current({ type: DrawingActionKind.CLEAR_ALL }); // 调用子组件的 dispatch
         }
     };
-
 
     // 获取所有绘制形状的坐标
     const getCoordinates = () => {
@@ -67,7 +71,7 @@ const DrawingExample = () => {
     const clearAll = () => {
         setNodes([]); // 清空节点
         console.log("🗑️ All markers cleared.");
-        clearAllFromParent()
+        clearAllFromParent();
     };
 
     // 处理鼠标悬停，防止 InfoWindow 频繁闪烁
@@ -90,6 +94,18 @@ const DrawingExample = () => {
     // **新增**：点击地图任意地方关闭 `InfoWindow`
     const handleMapClick = () => {
         setHoveredNode(null);
+    };
+
+    const fetchLocations = async () => {
+        try {
+            const response = await fetch("/api/update-location");
+            const data = await response.json();
+            if (data.success !== false) {
+                setNodes(data.nodes);
+            }
+        } catch (error) {
+            console.error("Error fetching locations:", error);
+        }
     };
 
     return (
