@@ -1,5 +1,4 @@
 import React from 'react';
-import {createRoot} from 'react-dom/client';
 import {APIProvider} from '@vis.gl/react-google-maps';
 
 import DrawingExample from './drawing-example';

@@ -1,5 +1,4 @@
 import React from 'react';
-import {createRoot} from 'react-dom/client';
 
 import StaticMap1 from './static-map-1';
 import StaticMap2 from './static-map-2';
@@ -30,13 +29,3 @@ function App() {
 }
 
 export default App;
-
-export function renderToDom(container: HTMLElement) {
-  const root = createRoot(container);
-
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-}

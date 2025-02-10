@@ -25,7 +25,7 @@ const DrawingExample = () => {
         lng: number;
         id: number;
     }>();
-    const [drawingState, setDrawingState] = useState<any>({ now: [] }); // 存储当前绘制的形状
+    const [drawingState, setDrawingState] = useState<unknown>({ now: [] }); // 存储当前绘制的形状
     const [hoveredNode, setHoveredNode] = useState<{
         lat: number;
         lng: number;
@@ -33,7 +33,7 @@ const DrawingExample = () => {
     const [isHovering, setIsHovering] = useState(false); // 防止 InfoWindow 触发 `onMouseLeave`
     const [isFetching, setIsFetching] = useState(false); // 是否开始获取坐标的状态
 
-    const dispatchRef = useRef<React.Dispatch<any> | null>(null); // 用于保存 dispatch
+    const dispatchRef = useRef<React.Dispatch<unknown> | null>(null); // 用于保存 dispatch
 
     // 轮询 API 获取坐标
     useEffect(() => {
@@ -51,7 +51,7 @@ const DrawingExample = () => {
     }, [isFetching]); // 依赖 isFetching，点击按钮后才开始获取数据
 
     // 接收 dispatch 并存储到 ref 中
-    const handleDispatch = (dispatch: React.Dispatch<any>) => {
+    const handleDispatch = (dispatch: React.Dispatch<unknown>) => {
         dispatchRef.current = dispatch;
     };
 

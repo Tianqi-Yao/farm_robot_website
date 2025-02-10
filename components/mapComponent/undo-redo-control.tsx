@@ -10,8 +10,8 @@ import { DrawingActionKind } from "./types";
 
 interface Props {
     drawingManager: google.maps.drawing.DrawingManager | null;
-    onStateChange: (state: any) => void; // Callback to update state in parent component
-    onDispatch?: (dispatch: React.Dispatch<any>) => void; // Callback to pass dispatch to parent component
+    onStateChange: (state: unknown) => void; // Callback to update state in parent component
+    onDispatch?: (dispatch: React.Dispatch<unknown>) => void; // Callback to pass dispatch to parent component
 }
 
 export const UndoRedoControl = ({ drawingManager, onStateChange, onDispatch }: Props) => {

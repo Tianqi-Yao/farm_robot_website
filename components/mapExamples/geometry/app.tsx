@@ -1,5 +1,4 @@
 import React,{useEffect} from 'react';
-import {createRoot} from 'react-dom/client';
 
 import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps';
 import {Circle, Polygon, Polyline} from './components';

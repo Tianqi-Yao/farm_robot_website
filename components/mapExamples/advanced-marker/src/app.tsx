@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {createRoot} from 'react-dom/client';
 
 import {APIProvider, Map} from '@vis.gl/react-google-maps';
 
@@ -47,13 +46,3 @@ const App = () => {
 };
 
 export default App;
-
-export function renderToDom(container: HTMLElement) {
-  const root = createRoot(container);
-
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-}

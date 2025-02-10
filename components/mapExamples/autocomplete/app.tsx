@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {createRoot} from 'react-dom/client';
 import {APIProvider, ControlPosition, Map} from '@vis.gl/react-google-maps';
 
 import ControlPanel from './control-panel';
