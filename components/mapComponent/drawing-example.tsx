@@ -25,7 +25,11 @@ const DrawingExample = () => {
         lng: number;
         id: number;
     }>();
-    const [drawingState, setDrawingState] = useState<unknown>(); // 存储当前绘制的形状
+    const [drawingState, setDrawingState] = useState<{
+        now: { lat: number; lng: number }[];
+    }>(() => ({
+        now: [],
+    }));
     const [hoveredNode, setHoveredNode] = useState<{
         lat: number;
         lng: number;
@@ -64,7 +68,7 @@ const DrawingExample = () => {
 
     // 获取所有绘制形状的坐标
     const getCoordinates = () => {
-        const state = drawingState as { now }
+        const state = drawingState as { now };
         if (!state?.now?.length) {
             console.log("⚠️ No shapes drawn yet!");
             setNodes([]);
@@ -96,7 +100,7 @@ const DrawingExample = () => {
     // 清空所有标记
     const clearAll = () => {
         setNodes([]); // 清空节点
-        setCurrentNode(undefined)
+        setCurrentNode(undefined);
         console.log("🗑️ All markers cleared.");
         clearAllFromParent();
     };
@@ -130,7 +134,7 @@ const DrawingExample = () => {
 
             if (data.success !== false && data.currentNode) {
                 setCurrentNode(data.currentNode);
-    
+
                 setNodes((prevNodes) => {
                     if (prevNodes.length > 0) {
                         if (prevNodes[0].id === data.currentNode.id) {
