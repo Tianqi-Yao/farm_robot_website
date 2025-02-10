@@ -1,3 +1,6 @@
+"use client";
+
+
 import React from "react";
 import { APIProvider } from "@vis.gl/react-google-maps";
 

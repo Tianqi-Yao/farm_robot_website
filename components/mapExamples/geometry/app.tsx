@@ -1,3 +1,6 @@
+"use client";
+
+
 import React,{useEffect} from 'react';
 
 import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps';
