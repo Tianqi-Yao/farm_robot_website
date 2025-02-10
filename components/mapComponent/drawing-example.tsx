@@ -64,13 +64,14 @@ const DrawingExample = () => {
 
     // 获取所有绘制形状的坐标
     const getCoordinates = () => {
-        if (!drawingState?.now?.length) {
+        const state = drawingState as { now }
+        if (!state?.now?.length) {
             console.log("⚠️ No shapes drawn yet!");
             setNodes([]);
             return;
         }
 
-        const allNodes = getAllCoordinates(drawingState.now);
+        const allNodes = getAllCoordinates(state.now);
 
         // add id to each node
         const allDrewNodesWithId = allNodes.map((node, index) => ({
