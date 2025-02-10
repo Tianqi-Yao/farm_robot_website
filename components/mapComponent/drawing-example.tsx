@@ -20,19 +20,35 @@ const MAP_ID = process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string;
 const DrawingExample = () => {
     const drawingManager = useDrawingManager();
     const [nodes, setNodes] = useState<{ lat: number; lng: number }[]>([]);
+    const [currentNode, setCurrentNode] = useState<{
+        lat: number;
+        lng: number;
+        id: number;
+    }>();
     const [drawingState, setDrawingState] = useState<any>({ now: [] }); // 存储当前绘制的形状
     const [hoveredNode, setHoveredNode] = useState<{
         lat: number;
         lng: number;
     } | null>(null);
     const [isHovering, setIsHovering] = useState(false); // 防止 InfoWindow 触发 `onMouseLeave`
+    const [isFetching, setIsFetching] = useState(false); // 是否开始获取坐标的状态
+
     const dispatchRef = useRef<React.Dispatch<any> | null>(null); // 用于保存 dispatch
 
-    // 轮询后端 API
+    // 轮询 API 获取坐标
     useEffect(() => {
-        const interval = setInterval(fetchLocations, 5000); // 每 5 秒获取新坐标
-        return () => clearInterval(interval);
-    }, []);
+        let interval: NodeJS.Timeout | null = null;
+
+        if (isFetching) {
+            interval = setInterval(fetchCurrentRobotLocations, 5000); // 每 5 秒获取新坐标
+        } else if (!isFetching && interval) {
+            clearInterval(interval); // 停止轮询
+        }
+
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [isFetching]); // 依赖 isFetching，点击按钮后才开始获取数据
 
     // 接收 dispatch 并存储到 ref 中
     const handleDispatch = (dispatch: React.Dispatch<any>) => {
@@ -55,12 +71,21 @@ const DrawingExample = () => {
         }
 
         const allNodes = getAllCoordinates(drawingState.now);
+
         // add id to each node
-        allNodes.forEach((node, index) => {
-            node.id = index;
-        });
-        console.log("📍 All Drawn Nodes:", allNodes);
-        setNodes(allNodes);
+        const allDrewNodesWithId = allNodes.map((node, index) => ({
+            ...node,
+            id: index + 1,
+        }));
+        // concat nodes
+        console.log("currentNode", currentNode);
+        if (currentNode) {
+            console.log("currentNode", currentNode);
+
+            allDrewNodesWithId.unshift(currentNode);
+        }
+        setNodes(allDrewNodesWithId);
+        console.log("📍 All Drawn Nodes:", allDrewNodesWithId);
 
         if (drawingManager) {
             drawingManager.setDrawingMode(null); // 切换绘制模式
@@ -70,6 +95,7 @@ const DrawingExample = () => {
     // 清空所有标记
     const clearAll = () => {
         setNodes([]); // 清空节点
+        setCurrentNode(undefined)
         console.log("🗑️ All markers cleared.");
         clearAllFromParent();
     };
@@ -96,16 +122,37 @@ const DrawingExample = () => {
         setHoveredNode(null);
     };
 
-    const fetchLocations = async () => {
+    const fetchCurrentRobotLocations = async () => {
         try {
-            const response = await fetch("/api/update-location");
+            const response = await fetch("map/api/update-location");
             const data = await response.json();
-            if (data.success !== false) {
-                setNodes(data.nodes);
+
+            if (data.success !== false && data.currentNode) {
+                setCurrentNode(data.currentNode);
+    
+                setNodes((prevNodes) => {
+                    if (prevNodes.length > 0) {
+                        if (prevNodes[0].id === data.currentNode.id) {
+                            console.log(1);
+                            return [data.currentNode, ...prevNodes.slice(1)];
+                        } else {
+                            console.log(2);
+                            return [data.currentNode, ...prevNodes];
+                        }
+                    } else {
+                        console.log(3);
+                        return [data.currentNode];
+                    }
+                });
             }
         } catch (error) {
             console.error("Error fetching locations:", error);
         }
+    };
+
+    // 启动/停止获取 API 坐标的函数
+    const toggleFetching = () => {
+        setIsFetching((prev) => !prev);
     };
 
     return (
@@ -140,11 +187,13 @@ const DrawingExample = () => {
                     <InfoWindow
                         position={hoveredNode}
                         onCloseClick={() => setHoveredNode(null)}
-                        onMouseEnter={() => setIsHovering(true)}
-                        onMouseLeave={() => setIsHovering(false)}
                         pixelOffset={[0, -35]}
                     >
-                        <div className="p-2 text-black">
+                        <div
+                            className="p-2 text-black"
+                            onMouseEnter={() => setIsHovering(true)}
+                            onMouseLeave={() => setIsHovering(false)}
+                        >
                             <p>
                                 <strong>ID:</strong> {hoveredNode.id}
                             </p>
@@ -185,6 +234,14 @@ const DrawingExample = () => {
                 className="p-2 bg-red-500 text-white rounded"
             >
                 Clear All
+            </button>
+            <button
+                onClick={toggleFetching}
+                className={`mt-2 p-2 ${
+                    isFetching ? "bg-red-500" : "bg-blue-500"
+                } text-white rounded`}
+            >
+                {isFetching ? "Stop Fetching" : "Start Fetching Coordinates"}
             </button>
 
             {/* 显示所有绘制的坐标点 */}
