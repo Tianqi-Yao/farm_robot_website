@@ -13,7 +13,7 @@ import { useDrawingManager } from "./use-drawing-manager";
 import ControlPanel from "./control-panel";
 import { getAllCoordinates } from "./getCoordinates";
 import { useState, useCallback, useRef, useEffect } from "react";
-import { DrawingActionKind, Overlay } from "./types";
+import { DrawingActionKind } from "./types";
 
 const MAP_ID = process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string;
 
