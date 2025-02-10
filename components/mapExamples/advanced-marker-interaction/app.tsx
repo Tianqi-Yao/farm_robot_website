@@ -14,8 +14,6 @@ import {
 
 import {getData} from './data';
 
-import ControlPanel from './control-panel';
-
 import './style.css';
 
 export type AnchorPointName = keyof typeof AdvancedMarkerAnchorPoint;
@@ -40,7 +38,7 @@ const App = () => {
   const [hoverId, setHoverId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const [anchorPoint, setAnchorPoint] = useState('BOTTOM' as AnchorPointName);
+  const anchorPoint = 'BOTTOM'
   const [selectedMarker, setSelectedMarker] =
     useState<google.maps.marker.AdvancedMarkerElement | null>(null);
   const [infoWindowShown, setInfoWindowShown] = useState(false);
@@ -175,12 +173,6 @@ const App = () => {
           </InfoWindow>
         )}
       </Map>
-      <ControlPanel
-        anchorPointName={anchorPoint}
-        onAnchorPointChange={(newAnchorPoint: AnchorPointName) =>
-          setAnchorPoint(newAnchorPoint)
-        }
-      />
     </APIProvider>
   );
 };

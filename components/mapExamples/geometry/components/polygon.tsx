@@ -131,3 +131,5 @@ export const Polygon = forwardRef((props: PolygonProps, ref: PolygonRef) => {
 
   return null;
 });
+
+Polygon.displayName = 'Polygon';

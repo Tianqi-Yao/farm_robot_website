@@ -116,12 +116,12 @@ const App = () => {
       </div>
       
 
-      {/* <ControlPanel
+      <ControlPanel
         center={center}
         radius={radius}
         onCenterChanged={setCenter}
         onRadiusChanged={setRadius}
-      /> */}
+      />
 
       
     </APIProvider>

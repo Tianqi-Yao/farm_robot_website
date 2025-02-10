@@ -19,7 +19,7 @@ export async function POST(req: Request) {
 
         return NextResponse.json({ success: true, currentNode }, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ success: false, message: "Invalid request" }, { status: 500 });
+        return NextResponse.json({ success: false, message: "Invalid request. error: ", error }, { status: 500 });
     }
 }
 

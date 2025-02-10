@@ -129,3 +129,5 @@ export const Polyline = forwardRef((props: PolylineProps, ref: PolylineRef) => {
 
   return null;
 });
+
+Polyline.displayName = 'Polyline';
