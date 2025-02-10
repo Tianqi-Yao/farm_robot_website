@@ -13,7 +13,7 @@ import { useDrawingManager } from "./use-drawing-manager";
 import ControlPanel from "./control-panel";
 import { getAllCoordinates } from "./getCoordinates";
 import { useState, useCallback, useRef, useEffect } from "react";
-import { DrawingActionKind } from "./types";
+import { DrawingActionKind, Overlay } from "./types";
 
 const MAP_ID = process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string;
 
@@ -25,7 +25,7 @@ const DrawingExample = () => {
         lng: number;
         id: number;
     }>();
-    const [drawingState, setDrawingState] = useState<unknown>({ now: [] }); // 存储当前绘制的形状
+    const [drawingState, setDrawingState] = useState<unknown>(); // 存储当前绘制的形状
     const [hoveredNode, setHoveredNode] = useState<{
         lat: number;
         lng: number;
@@ -64,7 +64,7 @@ const DrawingExample = () => {
 
     // 获取所有绘制形状的坐标
     const getCoordinates = () => {
-        if (!drawingState.now.length) {
+        if (!drawingState?.now?.length) {
             console.log("⚠️ No shapes drawn yet!");
             setNodes([]);
             return;
