@@ -1,4 +1,6 @@
-export function getAllCoordinates(overlays: any[]): { lat: number; lng: number }[] {
+import { Overlay } from "./types";
+
+export function getAllCoordinates(overlays: Overlay[]): { lat: number; lng: number }[] {
     let allNodes: { lat: number; lng: number }[] = [];
 
     overlays.forEach((overlay) => {
